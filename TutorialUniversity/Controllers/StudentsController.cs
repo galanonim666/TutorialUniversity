@@ -39,7 +39,7 @@ namespace TutorialUniversity.Controllers
                 searchString = currentFilter;
             }
 
-            var students = from s in _context.Students
+            var students = from s in _context.Students.Include(s => s.Enrollments)
                            select s;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -77,7 +77,7 @@ namespace TutorialUniversity.Controllers
                .Include(s => s.Enrollments)
                    .ThenInclude(e => e.Course)
                .AsNoTracking()
-               .SingleOrDefaultAsync(m => m.Id == id);
+               .SingleOrDefaultAsync(m => m.ID == id);
             if (student == null)
             {
                 return NotFound();
@@ -129,7 +129,7 @@ namespace TutorialUniversity.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.SingleOrDefaultAsync(m => m.Id == id);
+            var student = await _context.Students.SingleOrDefaultAsync(m => m.ID == id);
             if (student == null)
             {
                 return NotFound();
@@ -145,7 +145,7 @@ namespace TutorialUniversity.Controllers
             {
                 return NotFound();
             }
-            var studentToUpdate = await _context.Students.SingleOrDefaultAsync(s => s.Id == id);
+            var studentToUpdate = await _context.Students.SingleOrDefaultAsync(s => s.ID == id);
             if (await TryUpdateModelAsync<Student>(
                 studentToUpdate,
                 "",
@@ -176,7 +176,7 @@ namespace TutorialUniversity.Controllers
 
             var student = await _context.Students
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.Id == id);
+                .SingleOrDefaultAsync(m => m.ID == id);
             if (student == null)
             {
                 return NotFound();
@@ -198,7 +198,7 @@ namespace TutorialUniversity.Controllers
         {
             var student = await _context.Students
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.Id == id);
+                .SingleOrDefaultAsync(m => m.ID == id);
             if (student == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -219,7 +219,7 @@ namespace TutorialUniversity.Controllers
 
         private bool StudentExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.Students.Any(e => e.ID == id);
         }
     }
 }
