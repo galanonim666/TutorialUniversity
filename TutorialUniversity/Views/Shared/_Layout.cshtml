@@ -35,6 +35,16 @@
                     <li><a asp-area="" asp-controller="Students" asp-action="Index">Students</a></li>
                     <li><a asp-area="" asp-controller="Courses" asp-action="Index">Courses</a></li>
                     <li><a asp-area="" asp-controller="Instructors" asp-action="Index">Instructors</a></li>
+                    @{ Dictionary<string, string> dict = null; }
+                    <li><a asp-area="" asp-controller="Instructors" asp-action="Index" asp-all-route-data="dict">Instructors2</a></li>
+                    <li><a asp-area="" asp-controller="Instructors" asp-action="Index" asp-route-id="">Instructors3</a></li>
+                    <li>
+                        @Html.ActionLink("Instructors HtmlHelper1", "Index", "Instructors", new { })                        
+                    </li>
+                    <li>
+                        @Html.ActionLink("Instructors HtmlHelper2", "Index", "Instructors", new { id="" })
+                    </li>
+                    
                     <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departments</a></li>
                 </ul>
             </div>
