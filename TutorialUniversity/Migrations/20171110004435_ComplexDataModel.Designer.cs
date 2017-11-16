@@ -12,15 +12,15 @@ using TutorialUniversity.Models;
 namespace TutorialUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20171116013140_InitialMsSqlMigration")]
-    partial class InitialMsSqlMigration
+    [Migration("20171110004435_ComplexDataModel")]
+    partial class ComplexDataModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
             modelBuilder.Entity("TutorialUniversity.Models.ContosoUniversity.Models.Instructor", b =>
                 {
