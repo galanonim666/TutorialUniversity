@@ -27,18 +27,12 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.RowVersion)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.RowVersion)
-        </dd>
+        </dd>        
         <dt>
             @Html.DisplayNameFor(model => model.Administrator)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Administrator.FirstMidName)
+            @Html.DisplayFor(model => model.Administrator.FullName)
         </dd>
     </dl>
 </div>
