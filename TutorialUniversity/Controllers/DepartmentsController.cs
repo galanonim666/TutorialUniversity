@@ -59,7 +59,7 @@ namespace TutorialUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DepartmentID,Name,Budget,StartDate,InstructorID,RowVersion")] Department department)
+        public async Task<IActionResult> Create([Bind("DepartmentID,Name,Budget,StartDate,InstructorID")] Department department)
         {
             if (ModelState.IsValid)
             {
@@ -79,18 +79,31 @@ namespace TutorialUniversity.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Departments.AsNoTracking().SingleOrDefaultAsync(m => m.DepartmentID == id);
-            if (department == null)
+            var departmentWithXmin = await _context.Departments
+                .AsNoTracking()
+                .Select(d => new { Department = d, xmin = EF.Property<uint>(d, "xmin") })
+                .SingleOrDefaultAsync(m => m.Department.DepartmentID == id);
+
+
+            //var department = await _context.Departments.AsNoTracking().SingleOrDefaultAsync(m => m.DepartmentID == id);
+            if (departmentWithXmin == null)
             {
                 return NotFound();
             }
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, nameof(Instructor.ID), nameof(Instructor.FullName), department.InstructorID);
-            return View(department);
+            ViewData["InstructorID"] = new SelectList(
+                _context.Instructors,
+                nameof(Instructor.ID),
+                nameof(Instructor.FullName),
+                departmentWithXmin.Department.InstructorID);
+            ViewData["RowVersion"] = departmentWithXmin.xmin;
+
+
+            return View(departmentWithXmin.Department);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, byte[] rowVersion)
+        public async Task<IActionResult> Edit(int? id, uint rowVersion)
         {
             if (id == null)
             {
@@ -109,7 +122,7 @@ namespace TutorialUniversity.Controllers
                 return View(deletedDepartment);
             }
 
-            _context.Entry(departmentToUpdate).Property("RowVersion").OriginalValue = rowVersion;
+            _context.Entry(departmentToUpdate).Property("xmin").OriginalValue = rowVersion;
 
             if (await TryUpdateModelAsync<Department>(
                 departmentToUpdate,
@@ -158,7 +171,11 @@ namespace TutorialUniversity.Controllers
                                 + "edit operation was canceled and the current values in the database "
                                 + "have been displayed. If you still want to edit this record, click "
                                 + "the Save button again. Otherwise click the Back to List hyperlink.");
-                        departmentToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+
+                        ViewData["RowVersion"] = exceptionEntry.Property("xmin").CurrentValue;
+
+                        //_context.Entry(departmentToUpdate).Property("xmin").CurrentValue = exceptionEntry.Property("xmin").CurrentValue;
+                        //departmentToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
                         ModelState.Remove("RowVersion");
                     }
                 }

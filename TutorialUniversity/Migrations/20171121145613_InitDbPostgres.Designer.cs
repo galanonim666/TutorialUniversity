@@ -12,15 +12,15 @@ using TutorialUniversity.Models;
 namespace TutorialUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20171121093738_InitDb")]
-    partial class InitDb
+    [Migration("20171121145613_InitDbPostgres")]
+    partial class InitDbPostgres
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
             modelBuilder.Entity("TutorialUniversity.Models.ContosoUniversity.Models.Instructor", b =>
                 {
@@ -99,11 +99,12 @@ namespace TutorialUniversity.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(50);
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
                     b.Property<DateTime>("StartDate");
+
+                    b.Property<uint>("xmin")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid");
 
                     b.HasKey("DepartmentID");
 

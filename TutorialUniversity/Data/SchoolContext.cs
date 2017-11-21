@@ -35,6 +35,7 @@ namespace TutorialUniversity.Data
             modelBuilder.Entity<CourseAssignment>()
                 .HasKey(c => new { c.CourseID, c.InstructorID });
 
+            modelBuilder.Entity<Department>().ForNpgsqlUseXminAsConcurrencyToken();
         }
     }
 }
