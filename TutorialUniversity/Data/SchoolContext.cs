@@ -36,6 +36,8 @@ namespace TutorialUniversity.Data
                 .HasKey(c => new { c.CourseID, c.InstructorID });
 
             modelBuilder.Entity<Department>().ForNpgsqlUseXminAsConcurrencyToken();
+            modelBuilder.Entity<Department>().Property<string>("ShadowTest");
+
         }
     }
 }

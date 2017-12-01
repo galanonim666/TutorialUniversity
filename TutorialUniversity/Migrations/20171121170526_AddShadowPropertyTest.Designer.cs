@@ -12,9 +12,10 @@ using TutorialUniversity.Models;
 namespace TutorialUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20171121170526_AddShadowPropertyTest")]
+    partial class AddShadowPropertyTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

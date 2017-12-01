@@ -79,9 +79,36 @@ namespace TutorialUniversity.Controllers
                 return NotFound();
             }
 
+            var depWithXmin = await _context.Departments.AsNoTracking()
+                .Select(d => new
+                {
+                    Department = d,
+                    xmin = EF.Property<uint>(d, "xmin"),
+                    ShadowTest = EF.Property<string>(d, "ShadowTest"),
+                })
+            .Where(d => d.Department.DepartmentID == id)
+            .SingleOrDefaultAsync();
+
+            var dep = await _context.Departments.AsNoTracking().Where(d => d.DepartmentID == id).SingleOrDefaultAsync();
+            var attachedEntry = _context.Attach(dep);
+            var s1 = attachedEntry;
+            attachedEntry.Property("xmin").OriginalValue = depWithXmin.xmin;
+            //attachedEntry.Property("xmin").CurrentValue = depWithXmin.xmin;
+            dep.Budget += 1;
+            var s2 = _context.Entry(dep).State;
+            await _context.SaveChangesAsync();
+            var s3 = _context.Entry(dep).State;
+
+
             var departmentWithXmin = await _context.Departments
                 .AsNoTracking()
-                .Select(d => new { Department = d, xmin = EF.Property<uint>(d, "xmin") })
+                .Select(d => new
+                {
+                    Department = d,
+                    xmin = EF.Property<uint>(d, "xmin"),
+                    ShadowTest = EF.Property<string>(d, "ShadowTest"),
+                })
+                //.AsNoTracking()
                 .SingleOrDefaultAsync(m => m.Department.DepartmentID == id);
 
 
@@ -97,6 +124,15 @@ namespace TutorialUniversity.Controllers
                 departmentWithXmin.Department.InstructorID);
             ViewData["RowVersion"] = departmentWithXmin.xmin;
 
+            var props = _context
+                .Entry(departmentWithXmin.Department)
+                .Properties
+                .Select(p => new { p.Metadata.Name, p.CurrentValue, p.OriginalValue }).ToList();
+
+            var c = _context.Entry(departmentWithXmin.Department).Property("ShadowTest").CurrentValue;
+
+            //departmentWithXmin.Department.Budget += 1;
+            //await _context.SaveChangesAsync();
 
             return View(departmentWithXmin.Department);
         }
