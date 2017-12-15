@@ -1,0 +1,1 @@
+﻿Test project that use ASP.NET CORE, EF Coreand PostgreSQL
