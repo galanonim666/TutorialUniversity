@@ -17,9 +17,16 @@ run aspnetcore_app (with proper connection string, host is the name of postgres 
 
 Running migration on database:
 1. first cd to project directory
+
+First option:
+
+ docker run -it --rm -v "$(pwd):/app" --workdir /app --network=tutorial_test -e ConnectionStrings__DefaultConnection="User ID=postgres;Password=qwe123;Host=some-postgres;Port=5432;Database=TutorialUniversity3;Pooling=true;" microsoft/aspnetcore-build /bin/bash -c "dotnet restore && dotnet ef database update"
+
+Second option
 2. run image with build tools
 
-        docker run -itd -v "$(pwd)":/app --workdir /app --network=tutorial_test --name=aspnetcore_build microsoft/aspnetcore-build /bin/bash
+        docker run -itd -v "$(pwd):/app" --workdir /app --network=tutorial_test --name=aspnetcore_build microsoft/aspnetcore-build /bin/bash
+        docker run -itd -v "$(pwd):/app" --workdir /app --network=tutorial_test --name=aspnetcore_build -e ConnectionStrings__DefaultConnection="User ID=postgres;Password=qwe123;Host=some-postgres;Port=5432;Database=TutorialUniversity3;Pooling=true;"  microsoft/aspnetcore-build /bin/bash
 
 3. attach to it
 
