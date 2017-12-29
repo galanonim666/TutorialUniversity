@@ -58,4 +58,4 @@ to connect to db (if it is created by ef migrations)
 
     \dt
 
-to list tables in database
+to list tables in database.
