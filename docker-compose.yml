@@ -1,0 +1,24 @@
+version: '3'
+services:
+  web:
+    build: ./TutorialUniversity/
+    ports:
+     - "8080:80"
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development 
+      ConnectionStrings__DefaultConnection: 'User ID=postgres;Password=qwe123;Host=db;Port=5432;Database=TutorialUniversity3;Pooling=true;'
+    networks: 
+      - tutorial_university_network
+  db:
+    image: "postgres"
+    environment:
+      POSTGRES_PASSWORD: qwe123
+    networks: 
+      - tutorial_university_network
+networks:
+  tutorial_university_network:
+
+#command to initialize database
+#docker run -it --rm -v "$(pwd):/app" --workdir /app --network=tutorialuniversity_tutorial_university_network -e ConnectionStrings__DefaultConnection="User ID=postgres;Password=qwe123;Host=db;Port=5432;Database=TutorialUniversity3;Pooling=true;" microsoft/aspnetcore-build /bin/bash -c "dotnet restore && dotnet ef database update"
