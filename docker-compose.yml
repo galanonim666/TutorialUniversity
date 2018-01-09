@@ -20,5 +20,5 @@ services:
 networks:
   tutorial_university_network:
 
-#command to initialize database
+#command to initialize database (execute after "docker-compose up", after that do "docker-compose restart") 
 #docker run -it --rm -v "$(pwd):/app" --workdir /app --network=tutorialuniversity_tutorial_university_network -e ConnectionStrings__DefaultConnection="User ID=postgres;Password=qwe123;Host=db;Port=5432;Database=TutorialUniversity3;Pooling=true;" microsoft/aspnetcore-build /bin/bash -c "dotnet restore && dotnet ef database update"
