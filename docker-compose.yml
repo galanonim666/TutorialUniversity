@@ -12,9 +12,10 @@ services:
     networks: 
       - tutorial_university_network
   db:
-    image: "postgres"
+    build: ./postgres_db_docker/
     environment:
       POSTGRES_PASSWORD: qwe123
+      POSTGRES_DB: TutorialUniversity3
     networks: 
       - tutorial_university_network
 networks:
