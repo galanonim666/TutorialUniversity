@@ -66,3 +66,16 @@ to connect to db (if it is created by ef migrations)
     \dt
 
 to list tables in database...
+
+
+
+---
+How to run pgadmin4 to manage postgres database:
+
+1. run this command:
+
+    docker run -p 8081:80 --name pgadmin4_local --link some-postgres:db -e "PGADMIN_DEFAULT_EMAIL=galanonim.qwe123@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=qwe123" -d dpage/pgadmin4
+
+2. open http://localhost:8081 and enter provided email and password
+
+3. Click "Add server", write some name and put the adress of your your database. It's "db" (not "localhost" because this is "localhost" inside container, you need to provide ip of container running database or hostname provided in command 1. where you did container linking (you did "some-postgres:db" so host file inside contaner was modified and "db" name points to ip address of "some-postgress" container, which is you database)). Use username and password provided when you created container that runs database (postgres:qwe123 in this case)
