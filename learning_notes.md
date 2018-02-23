@@ -83,3 +83,5 @@ or this if you use docker network
 2. open http://localhost:8081 and enter provided email and password
 
 3. Click "Add server", write some name and put the adress of your your database. It's "db" (not "localhost" because this is "localhost" inside container, you need to provide ip of container running database or hostname provided in command 1. where you did container linking (you did "some-postgres:db" so host file inside contaner was modified and "db" name points to ip address of "some-postgress" container, which is you database)). Use username and password provided when you created container that runs database (postgres:qwe123 in this case)
+
+If your database and pgadmin container are in the same network (you used `--network` when creating container) then as a name you can just use container name where you have database (here 'some-postgres' instead of 'db' you specified when linking)
